@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now())
+}
+
+model UserAccount {
+  idUser    String   @id @default(uuid(7)) @map("id_user") @db.Uuid
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  userName  String   @unique @map("user_name")
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  staffAnggota StaffAnggota[] @relation("UserAccountStaffAnggota")
+
+  @@map("user_account")
+}
+
+model Activity {
+  idActivity   String   @id @default(uuid(7)) @map("id_activity") @db.Uuid
+  activityName String   @map("activity_name")
+  description  String
+  location     String
+  date         DateTime
+  anggotaDewanId String   @map("anggota_dewan_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  expenses     Expense[] @relation("ActivityExpenses") 
+  anggotaDewan AnggotaDewan @relation("AnggotaDewanActivities", fields: [anggotaDewanId], references: [idAnggota])
+
+  @@map("activity")
+}
+
+model Expense {
+  idExpense   String   @id @default(uuid(7)) @map("id_expense") @db.Uuid
+  expenseName String   @map("expense_name")
+  amount      Decimal  @db.Decimal(10, 2)
+  date        DateTime
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  activityId  String   @map("activity_id") @db.Uuid
+
+  activity    Activity @relation("ActivityExpenses", fields: [activityId], references: [idActivity])
+
+  @@map("expense")
+}
+
+model AnggotaDewan{
+  idAnggota   String   @id @default(uuid(7)) @map("id_anggota") @db.Uuid
+  nama        String
+  jabatan     String?
+  periode     String?
+  partaiId    String   @map("partai_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  partai      PartaiPolitik @relation("AnggotaDewanPartai", fields: [partaiId], references: [idPartai])
+  activities  Activity[] @relation("AnggotaDewanActivities")
+  staffAnggota StaffAnggota[] @relation("AnggotaDewanStaffAnggota")
+  @@map("anggota_dewan")
+}
+
+model PartaiPolitik{
+  idPartai    String   @id @default(uuid(7)) @map("id_partai") @db.Uuid
+  namaPartai  String   @map("nama_partai")
+  singkatan   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  anggotaDewan AnggotaDewan[] @relation("AnggotaDewanPartai")
+  @@map("partai_politik")
+}
+
+model StaffAnggota{
+  idStaff     String   @id @default(uuid(7)) @map("id_staff") @db.Uuid
+  idUser     String   @map("id_user") @db.Uuid
+  idAnggota   String   @map("id_anggota") @db.Uuid
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  anggotaDewan AnggotaDewan @relation("AnggotaDewanStaffAnggota", fields: [idAnggota], references: [idAnggota])
+  userAccount UserAccount @relation("UserAccountStaffAnggota", fields: [idUser], references: [idUser])
+
+  @@map("staff_anggota")
+}
