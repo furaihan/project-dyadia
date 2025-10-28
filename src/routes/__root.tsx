@@ -16,9 +16,14 @@ import type { QueryClient } from '@tanstack/react-query'
 
 interface MyRouterContext {
   queryClient: QueryClient
+  user?: { id: string; name: string }
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  beforeLoad: () => {
+    const user = { id: '123', name: 'John Doe' } // Replace with real auth logic
+    return { user }
+  },
   head: () => ({
     meta: [
       {
