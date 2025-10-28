@@ -15,12 +15,12 @@ export function Auth({
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="mx-auto w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="mx-auto w-12 h-12 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
               <Lock className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">{actionText}</h1>
@@ -82,14 +82,14 @@ export function Auth({
             {/* Status Messages */}
             {status === 'error' && (
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>Authentication failed. Please check your credentials.</span>
               </div>
             )}
 
             {status === 'success' && (
               <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
-                <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 shrink-0" />
                 <span>Authentication successful!</span>
               </div>
             )}
@@ -108,7 +108,7 @@ export function Auth({
                 }
               }}
               disabled={status === 'pending'}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2.5 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white py-2.5 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {status === 'pending' ? (
                 <>
