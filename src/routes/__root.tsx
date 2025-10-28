@@ -13,15 +13,27 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { createServerFn } from '@tanstack/react-start'
+import { useAppSession } from '../lib/session'
 
 interface MyRouterContext {
   queryClient: QueryClient
-  user?: { id: string; name: string }
+  user?: { email: string}
 }
+
+const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
+  const session = await useAppSession()
+
+  if (!session.data?.userEmail) {
+    return null
+  }
+
+  return { email: session.data.userEmail }
+})
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: () => {
-    const user = { id: '123', name: 'John Doe' } // Replace with real auth logic
+    const user = fetchUser()
     return { user }
   },
   head: () => ({
