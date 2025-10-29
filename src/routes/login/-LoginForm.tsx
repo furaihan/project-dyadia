@@ -1,49 +1,52 @@
 import { Auth } from "@/components/auth";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { loginFn } from "../_oligarki";
+import { useRouter } from "@tanstack/react-router";
 
 export function LoginForm() {
-  const [status, setStatus] = useState<'pending' | 'idle' | 'success' | 'error'>('idle');
+  const router = useRouter();
+
+  const loginMutation = useMutation({
+    mutationFn: loginFn,
+    onSuccess: async (ctx) => {
+      if (!ctx?.error) {
+        await router.invalidate();
+        router.navigate({ to: "/" });
+      }
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('pending');
 
     try {
       const formData = new FormData(e.currentTarget);
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
 
       // Validate inputs
       if (!email || !password) {
-        setStatus('error');
         return;
       }
 
-      // TODO: Replace with actual authentication API call
-      console.log('Login attempt:', { email, password });
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // On success
-      setStatus('success');
-      
-      // Redirect or handle post-login logic
-      setTimeout(() => {
-        // You can add navigation here
-        console.log('Login successful, redirecting...');
-      }, 1000);
+      await loginMutation.mutateAsync({ email, password } as any);
     } catch (error) {
-      console.error('Login error:', error);
-      setStatus('error');
+      console.error("Login error:", error);
     }
+  };
+
+  const getStatus = (): "pending" | "idle" | "success" | "error" => {
+    if (loginMutation.isPending) return "pending";
+    if (loginMutation.isSuccess) return "success";
+    if (loginMutation.isError) return "error";
+    return "idle";
   };
 
   return (
     <Auth
       actionText="Sign In"
       onSubmit={handleSubmit}
-      status={status}
+      status={getStatus()}
     />
   );
 }

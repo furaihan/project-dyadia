@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as OligarkiRouteImport } from './routes/_oligarki'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
@@ -32,6 +33,11 @@ const OligarkiRoute = OligarkiRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/login': typeof LoginIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/login': typeof LoginIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/login/': typeof LoginIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/login'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/login'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/login/'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  LoginIndexRoute: typeof LoginIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
@@ -336,6 +356,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  LoginIndexRoute: LoginIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,
