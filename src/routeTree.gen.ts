@@ -15,6 +15,7 @@ import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoPrismaRouteImport } from './routes/demo/prisma'
+import { Route as OligarkiDashboardRouteRouteImport } from './routes/_oligarki/dashboard/route'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -54,6 +55,11 @@ const DemoPrismaRoute = DemoPrismaRouteImport.update({
   id: '/demo/prisma',
   path: '/demo/prisma',
   getParentRoute: () => rootRouteImport,
+} as any)
+const OligarkiDashboardRouteRoute = OligarkiDashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => OligarkiRoute,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
@@ -108,6 +114,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof OligarkiDashboardRouteRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof OligarkiDashboardRouteRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -143,7 +151,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_oligarki': typeof OligarkiRoute
+  '/_oligarki': typeof OligarkiRouteWithChildren
+  '/_oligarki/dashboard': typeof OligarkiDashboardRouteRoute
   '/demo/prisma': typeof DemoPrismaRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -180,6 +190,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_oligarki'
+    | '/_oligarki/dashboard'
     | '/demo/prisma'
     | '/demo/table'
     | '/demo/tanstack-query'
@@ -216,7 +228,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  OligarkiRoute: typeof OligarkiRoute
+  OligarkiRoute: typeof OligarkiRouteWithChildren
   DemoPrismaRoute: typeof DemoPrismaRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -276,6 +288,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/demo/prisma'
       preLoaderRoute: typeof DemoPrismaRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_oligarki/dashboard': {
+      id: '/_oligarki/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof OligarkiDashboardRouteRouteImport
+      parentRoute: typeof OligarkiRoute
     }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
@@ -350,9 +369,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OligarkiRouteChildren {
+  OligarkiDashboardRouteRoute: typeof OligarkiDashboardRouteRoute
+}
+
+const OligarkiRouteChildren: OligarkiRouteChildren = {
+  OligarkiDashboardRouteRoute: OligarkiDashboardRouteRoute,
+}
+
+const OligarkiRouteWithChildren = OligarkiRoute._addFileChildren(
+  OligarkiRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  OligarkiRoute: OligarkiRoute,
+  OligarkiRoute: OligarkiRouteWithChildren,
   DemoPrismaRoute: DemoPrismaRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,

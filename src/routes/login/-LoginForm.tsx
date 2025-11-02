@@ -18,18 +18,19 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Submitting login form");
 
     try {
       const formData = new FormData(e.currentTarget);
       const email = formData.get("email") as string;
       const password = formData.get("password") as string;
-
+      console.log("Form Data:", { email, password });
       // Validate inputs
       if (!email || !password) {
         return;
       }
 
-      await loginMutation.mutateAsync({ email, password } as any);
+      await loginMutation.mutateAsync({ data: { email, password } });
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -43,10 +44,6 @@ export function LoginForm() {
   };
 
   return (
-    <Auth
-      actionText="Sign In"
-      onSubmit={handleSubmit}
-      status={getStatus()}
-    />
+    <Auth actionText="Sign In" onSubmit={handleSubmit} status={getStatus()} />
   );
 }

@@ -1,16 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { loginSchema } from "../schemas/auth.schema";
 import { prisma } from "@/db";
 import { comparePassword } from "../lib/utils";
 import { useAppSession } from "@/lib/session";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 export const loginFn = createServerFn({ method: "POST" })
-  .inputValidator(
-    (credential: { email: string; password: string }) => {
-      return loginSchema.parse(credential);
-    }
-  )
+  .inputValidator((data) => {
+    console.log("Validating login data:", data);
+    return loginSchema.parse(data)
+  })
   .handler(async ({ data }) => {
     const { email, password } = data;
 
@@ -21,6 +22,7 @@ export const loginFn = createServerFn({ method: "POST" })
     });
     
     if (!user) {
+      console.log("User not found for email:", email);
       return {
         error: true,
         userNotFound: true,
@@ -30,6 +32,7 @@ export const loginFn = createServerFn({ method: "POST" })
 
     const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
+      console.log("Invalid password attempt for email:", email);
       return {
         error: true,
         invalidCredentials: true,
@@ -49,5 +52,19 @@ export const Route = createFileRoute("/_oligarki")({
       throw new Error("Unauthorized");
     }
   },
+  component: LayoutComponent,
 });
+
+function LayoutComponent() {
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+      </div>
+    </SidebarProvider>
+  );
+}
 

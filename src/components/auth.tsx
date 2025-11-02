@@ -28,7 +28,7 @@ export function Auth({
           </div>
 
           {/* Form */}
-          <div className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
@@ -96,17 +96,7 @@ export function Auth({
 
             {/* Submit Button */}
             <button
-              type="button"
-              onClick={(e) => {
-                const formElement = e.currentTarget.closest('.space-y-4')?.querySelector('input[name="email"]')?.closest('.space-y-4')
-                if (formElement) {
-                  const fakeEvent = {
-                    preventDefault: () => {},
-                    currentTarget: formElement,
-                  } as React.FormEvent<HTMLFormElement>
-                  onSubmit(fakeEvent)
-                }
-              }}
+              type="submit"
               disabled={status === 'pending'}
               className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white py-2.5 rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -119,7 +109,7 @@ export function Auth({
                 <span>{actionText}</span>
               )}
             </button>
-          </div>
+          </form>
 
           {/* After Submit Content */}
           {afterSubmit && (
