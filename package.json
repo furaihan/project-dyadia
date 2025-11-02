@@ -15,7 +15,9 @@
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:studio": "dotenv -e .env.local -- prisma studio",
-    "db:seed": "dotenv -e .env.local -- prisma db seed"
+  "db:seed": "dotenv -e .env.local -- ts-node seed.ts",
+  "db:seed:reset": "dotenv -e .env.local -- ts-node seed.ts reset",
+  "db:seed:fresh": "dotenv -e .env.local -- ts-node seed.ts fresh"
   },
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
