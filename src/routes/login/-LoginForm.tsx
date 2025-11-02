@@ -8,10 +8,11 @@ export function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: loginFn,
-    onSuccess: async (ctx) => {
-      if (!ctx?.error) {
+    onSuccess: async (result) => {
+      if (!result?.error) {
         await router.invalidate();
-        router.navigate({ to: "/" });
+        // Redirect to dashboard on successful login
+        router.navigate({ to: "/dashboard" });
       }
     },
   });
@@ -38,12 +39,24 @@ export function LoginForm() {
 
   const getStatus = (): "pending" | "idle" | "success" | "error" => {
     if (loginMutation.isPending) return "pending";
-    if (loginMutation.isSuccess) return "success";
-    if (loginMutation.isError) return "error";
+    if (loginMutation.isSuccess && !loginMutation.data?.error) return "success";
+    if (loginMutation.isError || loginMutation.data?.error) return "error";
     return "idle";
   };
 
+  const getErrorMessage = (): string | undefined => {
+    if (loginMutation.data?.error && loginMutation.data?.message) {
+      return loginMutation.data.message;
+    }
+    return undefined;
+  };
+
   return (
-    <Auth actionText="Sign In" onSubmit={handleSubmit} status={getStatus()} />
+    <Auth 
+      actionText="Sign In" 
+      onSubmit={handleSubmit} 
+      status={getStatus()} 
+      errorMessage={getErrorMessage()}
+    />
   );
 }

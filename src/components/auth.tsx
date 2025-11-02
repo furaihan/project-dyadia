@@ -6,11 +6,13 @@ export function Auth({
   onSubmit,
   status,
   afterSubmit,
+  errorMessage,
 }: {
   actionText: string
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   status: 'pending' | 'idle' | 'success' | 'error'
   afterSubmit?: React.ReactNode
+  errorMessage?: string
 }) {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -83,7 +85,7 @@ export function Auth({
             {status === 'error' && (
               <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
                 <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>Authentication failed. Please check your credentials.</span>
+                <span>{errorMessage || 'Authentication failed. Please check your credentials.'}</span>
               </div>
             )}
 

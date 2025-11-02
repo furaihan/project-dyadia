@@ -44,6 +44,13 @@ export const loginFn = createServerFn({ method: "POST" })
     await session.update({
       userEmail: user.email,
     });
+
+    console.log("Login successful for email:", email);
+    return {
+      error: false,
+      success: true,
+      message: "Login successful",
+    };
   });
 
 export const Route = createFileRoute("/_oligarki")({
