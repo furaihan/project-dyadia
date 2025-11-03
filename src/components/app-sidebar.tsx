@@ -1,11 +1,8 @@
 import {
-  Home,
-  LayoutDashboard,
-  Settings,
-  Users,
-  FileText,
-  BarChart3,
-} from 'lucide-react'
+  Building2Icon,
+  HandshakeIcon,
+  HomeIcon,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -17,50 +14,30 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
-import { Link } from '@tanstack/react-router'
+} from "@/components/ui/sidebar";
+import { Link } from "@tanstack/react-router";
 
 // Navigation items configuration
 // Add or modify items here to update the sidebar navigation
 export const navigationItems = [
   {
-    title: 'Overview',
-    icon: Home,
-    href: '/',
+    title: "Dashboard",
+    icon: HomeIcon,
+    href: "/dashboard",
   },
   {
-    title: 'Dashboard',
-    icon: LayoutDashboard,
-    href: '/dashboard',
+    title: "Activity",
+    icon: HandshakeIcon,
+    href: "/activity",
   },
-  {
-    title: 'Analytics',
-    icon: BarChart3,
-    href: '/analytics',
-  },
-  {
-    title: 'Reports',
-    icon: FileText,
-    href: '/reports',
-  },
-  {
-    title: 'Users',
-    icon: Users,
-    href: '/users',
-  },
-  {
-    title: 'Settings',
-    icon: Settings,
-    href: '/settings',
-  },
-]
+];
 
 export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-3">
         <div className="flex items-center gap-2">
-          <LayoutDashboard className="h-6 w-6" />
+          <Building2Icon className="h-6 w-6" />
           <span className="font-semibold text-lg">Oligarki Panel</span>
         </div>
       </SidebarHeader>
@@ -72,10 +49,10 @@ export function AppSidebar() {
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link 
+                    <Link
                       to={item.href}
                       activeProps={{
-                        className: 'bg-accent'
+                        className: "bg-accent",
                       }}
                     >
                       <item.icon className="h-4 w-4" />
@@ -94,5 +71,5 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
