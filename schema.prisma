@@ -31,7 +31,7 @@ model UserAccount {
 model Activity {
   idActivity   String   @id @default(uuid(7)) @map("id_activity") @db.Uuid
   activityName String   @map("activity_name")
-  description  String
+  description  String?
   location     String
   date         DateTime
   anggotaDewanId String   @map("anggota_dewan_id") @db.Uuid
@@ -86,16 +86,15 @@ model PartaiPolitik{
   @@map("partai_politik")
 }
 
-model StaffAnggota{
-  idStaff     String   @id @default(uuid(7)) @map("id_staff") @db.Uuid
-  idUser     String   @map("id_user") @db.Uuid
+model StaffAnggota {
+  idUser      String   @map("id_user") @db.Uuid
   idAnggota   String   @map("id_anggota") @db.Uuid
-
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   anggotaDewan AnggotaDewan @relation("AnggotaDewanStaffAnggota", fields: [idAnggota], references: [idAnggota])
-  userAccount UserAccount @relation("UserAccountStaffAnggota", fields: [idUser], references: [idUser])
+  userAccount  UserAccount  @relation("UserAccountStaffAnggota", fields: [idUser], references: [idUser])
 
+  @@id([idUser, idAnggota])
   @@map("staff_anggota")
 }
