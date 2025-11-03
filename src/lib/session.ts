@@ -4,6 +4,7 @@ import type { UserAccount } from '@prisma/client'
 
 type SessionUser = {
   userEmail: UserAccount['email']
+  fullName: string
 }
 
 export function useAppSession() {
@@ -13,5 +14,6 @@ export function useAppSession() {
   }
   return useSession<SessionUser>({
     password: sessionSecret,
+    maxAge: 60 * 60 * 24 * 7, // 7 days
   })
 }

@@ -43,6 +43,7 @@ export const loginFn = createServerFn({ method: "POST" })
 
     await session.update({
       userEmail: user.email,
+      fullName: user.firstName + ' ' + user.lastName,
     });
 
     console.log("Login successful for email:", email);
